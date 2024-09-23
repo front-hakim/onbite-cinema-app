@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react';
+import Searchbar from './search/searchbar';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <div>
-      Searchbar Layout
+      <Searchbar />
       {children}
     </div>
   );
