@@ -1,11 +1,13 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import style from '@/app/styles/searchbar.module.css';
 
 const Searchbar = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const q = searchParams.get('q') || '';
 
   const [value, setValue] = useState(q);
@@ -22,8 +24,12 @@ const Searchbar = () => {
     if (e.key === 'Enter') handleClick();
   };
 
+  useEffect(() => {
+    q ? setValue(q) : setValue('');
+  }, [pathname]);
+
   return (
-    <div>
+    <div className={style.wrapper}>
       <input
         type="text"
         onChange={handleChange}

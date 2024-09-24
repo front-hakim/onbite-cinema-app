@@ -1,0 +1,16 @@
+.recommend {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(250px), 1fr));
+  gap: 12px;
+}
+
+.all {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(130px), 1fr));
+  gap: 12px;
+}
+
+.recommend img,
+.all img {
+  width: 100%;
+}
