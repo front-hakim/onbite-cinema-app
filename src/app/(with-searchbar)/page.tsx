@@ -6,8 +6,6 @@ import { MovieData } from '../types';
 import MovieItem from '../components/movieItem';
 
 export default function Home() {
-  console.log(allMovies, recoMovies);
-
   return (
     <>
       <Head>
