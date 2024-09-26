@@ -5,6 +5,7 @@ import style from '@/app/styles/detail.module.css';
 const Page = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
 
+  // id값에 따라 늘 새로운 데이터를 보여줘야 하기 때문에 기본 옵션 사용
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie/${id}`);
   const detail = await res.json();
 
