@@ -2,11 +2,18 @@ import MovieItem from '@/app/components/movieItem';
 import { MovieData } from '@/app/types';
 import Head from 'next/head';
 import React from 'react';
-import searchMovies from '@/app/mocks/recommend.json';
 import style from '@/app/styles/search-result.module.css';
 
-const Page = ({ searchParams }: { searchParams: { q?: string } }) => {
+const Page = async ({ searchParams }: { searchParams: { q?: string } }) => {
   const q = searchParams.q;
+
+  // 검색 결과값에 따라 늘 새로운 데이터를 패칭하고 보여줘야 하기 때문에 기본 옵션 사용
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/movie/search?q=${q}`
+  );
+  const searchMovies = await res.json();
+
+  if (!res.ok) return <div>오류가 발생했습니다...</div>;
 
   return (
     <>
