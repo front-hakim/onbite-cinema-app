@@ -1,12 +1,25 @@
 import Head from 'next/head';
 import React from 'react';
 import style from '@/app/styles/detail.module.css';
+import { notFound } from 'next/navigation';
+
+export const generateStaticParams = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`, {
+    cache: 'force-cache',
+  });
+  const allMovies = await res.json();
+  const ids = allMovies.map(({ id }: { id: number }) => ({ id: String(id) }));
+
+  return ids;
+};
 
 const Page = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
 
-  // id값에 따라 늘 새로운 데이터를 보여줘야 하기 때문에 기본 옵션 사용
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie/${id}`);
+  // id값에 따라 새로운 데이터를 호출하고 해당 데이터를 캐싱하기 위한 옵션 적용
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie/${id}`, {
+    cache: 'force-cache',
+  });
   const detail = await res.json();
 
   const {
@@ -20,7 +33,12 @@ const Page = async ({ params }: { params: { id: string } }) => {
     title,
   } = detail;
 
-  if (!res.ok) return <div>오류가 발생했습니다...</div>;
+  if (!res.ok) {
+    if (res.status === 404) {
+      notFound();
+    }
+    return <div>오류가 발생했습니다...</div>;
+  }
 
   return (
     <>
