@@ -94,7 +94,7 @@ const ReviewList = async ({ movieId }: { movieId: string }) => {
     `${process.env.NEXT_PUBLIC_API_URL}/review/movie/${movieId}`
   );
 
-  const list = await res.json();
+  const list: ReviewData[] = await res.json();
 
   if (!res.ok) {
     throw new Error(`Review fetch failed : ${res.statusText}`);
