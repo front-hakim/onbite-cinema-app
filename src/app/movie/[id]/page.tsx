@@ -79,9 +79,9 @@ const RegisterReview = ({ movieId }: { movieId: string }) => {
     <section>
       <form action={createReviewActions} className={style.review_form}>
         <input type="text" name="movieId" value={movieId} hidden />
-        <textarea className={style.textarea} name="content" />
+        <textarea required className={style.textarea} name="content" />
         <div className={style.input_wrapper}>
-          <input className={style.input} type="text" name="author" />
+          <input required className={style.input} type="text" name="author" />
           <button type="submit">작성하기</button>
         </div>
       </form>
