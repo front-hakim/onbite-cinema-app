@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React from 'react';
 import style from '@/app/styles/detail.module.css';
 import { notFound } from 'next/navigation';
+import delay from '@/utils/delay';
 
 export const generateStaticParams = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`, {
@@ -16,6 +17,7 @@ export const generateStaticParams = async () => {
 const Page = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
 
+  await delay(2000);
   // id값에 따라 새로운 데이터를 호출하고 해당 데이터를 캐싱하기 위한 옵션 적용
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie/${id}`, {
     cache: 'force-cache',
