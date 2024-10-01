@@ -2,7 +2,8 @@ import Head from 'next/head';
 import React from 'react';
 import style from '@/app/styles/detail.module.css';
 import { notFound } from 'next/navigation';
-import delay from '@/utils/delay';
+import { ReviewData } from '@/app/types';
+import formatDate from '@/utils/formatDate';
 
 export const generateStaticParams = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`, {
@@ -14,14 +15,14 @@ export const generateStaticParams = async () => {
   return ids;
 };
 
-const Page = async ({ params }: { params: { id: string } }) => {
-  const id = params.id;
-
-  await delay(2000);
+const MovieDetail = async ({ movieId }: { movieId: string }) => {
   // id값에 따라 새로운 데이터를 호출하고 해당 데이터를 캐싱하기 위한 옵션 적용
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie/${id}`, {
-    cache: 'force-cache',
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/movie/${movieId}`,
+    {
+      cache: 'force-cache',
+    }
+  );
   const detail = await res.json();
 
   const {
@@ -68,6 +69,79 @@ const Page = async ({ params }: { params: { id: string } }) => {
         <h4>{subTitle}</h4>
         <p>{description}</p>
       </div>
+    </>
+  );
+};
+
+const RegisterReview = ({ movieId }: { movieId: string }) => {
+  const createReviewActions = async (formData: FormData) => {
+    'use server';
+
+    const content = formData.get('content') as string;
+    const author = formData.get('author') as string;
+
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/review`, {
+        method: 'POST',
+        body: JSON.stringify({ content, author, movieId }),
+      });
+    } catch (error) {
+      console.error(error);
+      return;
+    }
+  };
+  return (
+    <section>
+      <form action={createReviewActions} className={style.review_form}>
+        <textarea className={style.textarea} name="content" />
+        <div className={style.input_wrapper}>
+          <input className={style.input} type="text" name="author" />
+          <button type="submit">작성하기</button>
+        </div>
+      </form>
+    </section>
+  );
+};
+
+const ReviewList = async ({ movieId }: { movieId: string }) => {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/review/movie/${movieId}`
+  );
+
+  const list = await res.json();
+
+  if (!res.ok) {
+    throw new Error(`Review fetch failed : ${res.statusText}`);
+  }
+
+  if (list.length === 0) return;
+
+  return (
+    <section className={style.review_list_container}>
+      {list.map(({ id, createdAt, content, author }: ReviewData) => (
+        <div key={id}>
+          <div className={style.author}>
+            <span>{author}</span>
+            <span>{formatDate(createdAt)}일 작성됨</span>
+          </div>
+          <p>{content}</p>
+          <div>
+            <button className={style.remove}>리뷰 삭제하기</button>
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+};
+
+const Page = async ({ params }: { params: { id: string } }) => {
+  const id = params.id;
+
+  return (
+    <>
+      <MovieDetail movieId={id} />
+      <RegisterReview movieId={id} />
+      <ReviewList movieId={id} />
     </>
   );
 };

@@ -6,7 +6,7 @@ import style from '@/app/styles/search-result.module.css';
 import MovieSkeletonList from '@/app/components/movie-skeleton-list';
 import delay from '@/utils/delay';
 
-export const SearchResultList = async ({ q }: { q: string }) => {
+const SearchResultList = async ({ q }: { q: string }) => {
   await delay(2000);
 
   const res = await fetch(
