@@ -1,9 +1,9 @@
 import Head from 'next/head';
 import style from '@/app/styles/home.module.css';
 import { MovieData } from '../types';
-import MovieItem from '../components/movieItem';
+import MovieItem from '../../components/movieItem';
 import { Suspense } from 'react';
-import MovieSkeletonList from '../components/movie-skeleton-list';
+import MovieSkeletonList from '../../components/movie-skeleton-list';
 import delay from '@/utils/delay';
 
 export const dynamic = 'force-dynamic';

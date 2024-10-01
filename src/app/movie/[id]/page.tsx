@@ -4,6 +4,7 @@ import style from '@/app/styles/detail.module.css';
 import { notFound } from 'next/navigation';
 import { ReviewData } from '@/app/types';
 import formatDate from '@/utils/formatDate';
+import createReviewActions from '@/actions/createReviewActions';
 
 export const generateStaticParams = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`, {
@@ -74,25 +75,10 @@ const MovieDetail = async ({ movieId }: { movieId: string }) => {
 };
 
 const RegisterReview = ({ movieId }: { movieId: string }) => {
-  const createReviewActions = async (formData: FormData) => {
-    'use server';
-
-    const content = formData.get('content') as string;
-    const author = formData.get('author') as string;
-
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/review`, {
-        method: 'POST',
-        body: JSON.stringify({ content, author, movieId }),
-      });
-    } catch (error) {
-      console.error(error);
-      return;
-    }
-  };
   return (
     <section>
       <form action={createReviewActions} className={style.review_form}>
+        <input type="text" name="movieId" value={movieId} hidden />
         <textarea className={style.textarea} name="content" />
         <div className={style.input_wrapper}>
           <input className={style.input} type="text" name="author" />
