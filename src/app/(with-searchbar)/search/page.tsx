@@ -1,12 +1,12 @@
-import MovieItem from '@/app/components/movieItem';
+import MovieItem from '@/components/movieItem';
 import { MovieData } from '@/app/types';
 import Head from 'next/head';
 import React, { Suspense } from 'react';
 import style from '@/app/styles/search-result.module.css';
-import MovieSkeletonList from '@/app/components/movie-skeleton-list';
+import MovieSkeletonList from '@/components/movie-skeleton-list';
 import delay from '@/utils/delay';
 
-export const SearchResultList = async ({ q }: { q: string }) => {
+const SearchResultList = async ({ q }: { q: string }) => {
   await delay(2000);
 
   const res = await fetch(

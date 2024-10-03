@@ -1,16 +1,15 @@
 import Head from 'next/head';
 import style from '@/app/styles/home.module.css';
 import { MovieData } from '../types';
-import MovieItem from '../components/movieItem';
+import MovieItem from '../../components/movieItem';
 import { Suspense } from 'react';
-import MovieSkeletonList from '../components/movie-skeleton-list';
+import MovieSkeletonList from '../../components/movie-skeleton-list';
 import delay from '@/utils/delay';
 
 export const dynamic = 'force-dynamic';
 
 // 영화 전체 목록은 한번만 보여주면 크게 변할 일이 없기 때문에 force-cache 활성화
 const AllMovies = async () => {
-  await delay(3000);
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie`, {
     cache: 'force-cache',
   });
@@ -29,7 +28,6 @@ const AllMovies = async () => {
 
 // 추천 영화는 사용자에게 매번 다른 목록을 보여주는 것이 더 직관적으로 느껴질 듯하여 기본 옵션 사용
 const RecoMovies = async () => {
-  await delay(1500);
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/movie/random`);
   const recoMovies = await res.json();
 
